@@ -182,7 +182,7 @@ class AbstractBosonicFockState(SparseBosonicFockState):
 
 φ = TypeVar("φ", AbstractBosonicFockState, SparseBosonicFockState)
 
-def map_fock_basis(fn: Callable[[φ], φ], state: φ) -> φ:
+def map_fock_basis(fn: Callable[[Tuple[int,...]], Tuple[int,...]], state: φ) -> φ:
 
     if isinstance(state, AbstractBosonicFockState):
         return AbstractBosonicFockState(x
@@ -195,7 +195,7 @@ def map_fock_basis(fn: Callable[[φ], φ], state: φ) -> φ:
                                        if len(x := fn(basis)) > 0})
 
 
-def filter_fock_basis(fn: Callable[[φ], bool], state: φ) -> φ:
+def filter_fock_basis(fn: Callable[[Tuple[int,...]], bool], state: φ) -> φ:
 
     if isinstance(state, AbstractBosonicFockState):
         return AbstractBosonicFockState(filter(fn, state.basis()))

@@ -195,9 +195,7 @@ def measure_whole_state(state:SparseBosonicFockState) -> Tuple[int]:
 
 def progressive_simulation(input_state: Union[Tuple[int,...], SparseBosonicFockState],
                            circuit: ConcreteBSCircuit,
-                           number_samples: int = 1,
-                           memoize: bool = False,
-                           allow_parity_conjugation: bool = False):
+                           number_samples: int = 1):
 
     if isinstance(input_state, SparseBosonicFockState):
         input_state = copy(input_state)
@@ -217,7 +215,7 @@ def progressive_simulation(input_state: Union[Tuple[int,...], SparseBosonicFockS
         # the last component has more output modes and will be handled separately.
         for mode in range(len(components) - 1):
             X = components[mode]
-            after_X = apply_bs_circuit(X, Phi, memoize, allow_parity_conjugation)
+            after_X = apply_bs_circuit(X, Phi)
 
             marginals = mode_marginals_only(after_X, mode)
             sample_in_mode, collapsed_state = sample_project_collapse(after_X, mode, marginals)
@@ -230,7 +228,7 @@ def progressive_simulation(input_state: Union[Tuple[int,...], SparseBosonicFockS
 
         # after the last component, sample the whole remaining state
         X = components[-1]
-        after_X = apply_bs_circuit(X, Phi, memoize, allow_parity_conjugation)
+        after_X = apply_bs_circuit(X, Phi)
 
         # in contrast to the paper, we do not delete modes here, so the entire sample is still contained as a key of the sparse vector
         final_sample = measure_whole_state(after_X)
